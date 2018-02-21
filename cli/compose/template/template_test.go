@@ -23,6 +23,12 @@ func TestEscaped(t *testing.T) {
 	assert.Check(t, is.Equal("${foo}", result))
 }
 
+func TestSubstituteNoMatch(t *testing.T) {
+	result, err := Substitute("foo", defaultMapping)
+	assert.NilError(t, err)
+	assert.Equal(t, "foo", result)
+}
+
 func TestInvalid(t *testing.T) {
 	invalidTemplates := []string{
 		"${",
