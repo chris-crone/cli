@@ -1,6 +1,7 @@
 package template
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/gotestyourself/gotestyourself/assert"
@@ -117,8 +118,8 @@ func TestMandatoryVariableErrors(t *testing.T) {
 
 	for _, tc := range testCases {
 		_, err := Substitute(tc.template, defaultMapping)
-		assert.Error(t, err)
-		assert.IsType(t, &InvalidTemplateError{tc.expectedError}, err)
+		assert.ErrorContains(t, err, tc.expectedError)
+		assert.ErrorType(t, err, reflect.TypeOf(&InvalidTemplateError{}))
 	}
 }
 
@@ -143,7 +144,7 @@ func TestDefaultsForMandatoryVariables(t *testing.T) {
 
 	for _, tc := range testCases {
 		result, err := Substitute(tc.template, defaultMapping)
-		assert.Nil(t, err)
-		assert.Equal(t, tc.expected, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(tc.expected, result))
 	}
 }
