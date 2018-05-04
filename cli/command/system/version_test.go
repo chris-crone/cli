@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"testing"
@@ -11,7 +12,6 @@ import (
 	"github.com/docker/cli/internal/test"
 	"github.com/docker/docker/api"
 	"github.com/docker/docker/api/types"
-	"golang.org/x/net/context"
 )
 
 func TestVersionWithoutServer(t *testing.T) {
