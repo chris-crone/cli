@@ -1,6 +1,7 @@
 package swarm
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"unicode"
@@ -11,7 +12,6 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
-	"golang.org/x/net/context"
 )
 
 func getStackFilter(namespace string) filters.Args {

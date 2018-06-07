@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"fmt"
 	"runtime"
 	"sort"
@@ -16,7 +17,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"golang.org/x/net/context"
 	kubernetesClient "k8s.io/client-go/kubernetes"
 )
 
