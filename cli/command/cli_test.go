@@ -177,77 +177,93 @@ func TestOrchestratorSwitch(t *testing.T) {
 	defaultVersion := "v0.00"
 
 	var testcases = []struct {
-		doc                  string
-		configfile           string
-		envOrchestrator      string
-		flagOrchestrator     string
-		expectedOrchestrator string
-		expectedKubernetes   bool
-		expectedSwarm        bool
+		doc                    string
+		configfile             string
+		envOrchestrator        string
+		flagOrchestrator       string
+		expectedOrchestrator   string
+		expectedKubernetes     bool
+		expectedKubernetesOnly bool
+		expectedSwarm          bool
+		expectedSwarmOnly      bool
 	}{
 		{
 			doc: "default",
 			configfile: `{
 			}`,
-			expectedOrchestrator: "swarm",
-			expectedKubernetes:   false,
-			expectedSwarm:        true,
+			expectedOrchestrator:   "swarm",
+			expectedKubernetes:     false,
+			expectedKubernetesOnly: false,
+			expectedSwarm:          true,
+			expectedSwarmOnly:      true,
 		},
 		{
 			doc: "kubernetesConfigFile",
 			configfile: `{
 				"orchestrator": "kubernetes"
 			}`,
-			expectedOrchestrator: "kubernetes",
-			expectedKubernetes:   true,
-			expectedSwarm:        false,
+			expectedOrchestrator:   "kubernetes",
+			expectedKubernetes:     true,
+			expectedKubernetesOnly: true,
+			expectedSwarm:          false,
+			expectedSwarmOnly:      false,
 		},
 		{
 			doc: "kubernetesEnv",
 			configfile: `{
 			}`,
-			envOrchestrator:      "kubernetes",
-			expectedOrchestrator: "kubernetes",
-			expectedKubernetes:   true,
-			expectedSwarm:        false,
+			envOrchestrator:        "kubernetes",
+			expectedOrchestrator:   "kubernetes",
+			expectedKubernetesOnly: true,
+			expectedKubernetes:     true,
+			expectedSwarm:          false,
+			expectedSwarmOnly:      false,
 		},
 		{
 			doc: "kubernetesFlag",
 			configfile: `{
 			}`,
-			flagOrchestrator:     "kubernetes",
-			expectedOrchestrator: "kubernetes",
-			expectedKubernetes:   true,
-			expectedSwarm:        false,
+			flagOrchestrator:       "kubernetes",
+			expectedOrchestrator:   "kubernetes",
+			expectedKubernetes:     true,
+			expectedKubernetesOnly: true,
+			expectedSwarm:          false,
+			expectedSwarmOnly:      false,
 		},
 		{
 			doc: "allOrchestratorFlag",
 			configfile: `{
 			}`,
-			flagOrchestrator:     "all",
-			expectedOrchestrator: "all",
-			expectedKubernetes:   true,
-			expectedSwarm:        true,
+			flagOrchestrator:       "all",
+			expectedOrchestrator:   "all",
+			expectedKubernetes:     true,
+			expectedKubernetesOnly: false,
+			expectedSwarm:          true,
+			expectedSwarmOnly:      false,
 		},
 		{
 			doc: "envOverridesConfigFile",
 			configfile: `{
 				"orchestrator": "kubernetes"
 			}`,
-			envOrchestrator:      "swarm",
-			expectedOrchestrator: "swarm",
-			expectedKubernetes:   false,
-			expectedSwarm:        true,
+			envOrchestrator:        "swarm",
+			expectedOrchestrator:   "swarm",
+			expectedKubernetes:     false,
+			expectedKubernetesOnly: false,
+			expectedSwarm:          true,
+			expectedSwarmOnly:      true,
 		},
 		{
 			doc: "flagOverridesEnv",
 			configfile: `{
 			}`,
-			envOrchestrator:      "kubernetes",
-			flagOrchestrator:     "swarm",
-			expectedOrchestrator: "swarm",
-			expectedKubernetes:   false,
-			expectedSwarm:        true,
+			envOrchestrator:        "kubernetes",
+			flagOrchestrator:       "swarm",
+			expectedOrchestrator:   "swarm",
+			expectedKubernetes:     false,
+			expectedKubernetesOnly: false,
+			expectedSwarm:          true,
+			expectedSwarmOnly:      true,
 		},
 	}
 
@@ -271,7 +287,9 @@ func TestOrchestratorSwitch(t *testing.T) {
 			err := cli.Initialize(options)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(testcase.expectedKubernetes, cli.ClientInfo().HasKubernetes()))
+			assert.Check(t, is.Equal(testcase.expectedKubernetesOnly, cli.ClientInfo().HasKubernetesOnly()))
 			assert.Check(t, is.Equal(testcase.expectedSwarm, cli.ClientInfo().HasSwarm()))
+			assert.Check(t, is.Equal(testcase.expectedSwarmOnly, cli.ClientInfo().HasSwarmOnly()))
 			assert.Check(t, is.Equal(testcase.expectedOrchestrator, string(cli.ClientInfo().Orchestrator)))
 		})
 	}

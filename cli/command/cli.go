@@ -247,9 +247,19 @@ func (c ClientInfo) HasKubernetes() bool {
 	return c.Orchestrator == OrchestratorKubernetes || c.Orchestrator == OrchestratorAll
 }
 
+// HasKubernetesOnly checks if kubernetes is the only orchestrator enabled
+func (c ClientInfo) HasKubernetesOnly() bool {
+	return c.Orchestrator == OrchestratorKubernetes
+}
+
 // HasSwarm checks if swarm orchestrator is enabled
 func (c ClientInfo) HasSwarm() bool {
 	return c.Orchestrator == OrchestratorSwarm || c.Orchestrator == OrchestratorAll
+}
+
+// HasSwarmOnly checks if swarm is the only orchestrator enabled
+func (c ClientInfo) HasSwarmOnly() bool {
+	return c.Orchestrator == OrchestratorSwarm
 }
 
 // HasAll checks if all orchestrator is enabled
