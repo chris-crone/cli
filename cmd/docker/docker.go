@@ -347,6 +347,8 @@ func areSubcommandsSupported(cmd *cobra.Command, details versionDetails) error {
 	hasExperimental := details.ServerInfo().HasExperimental
 	hasExperimentalCLI := details.ClientInfo().HasExperimental
 	hasKubernetes := details.ClientInfo().HasKubernetes()
+	hasKubernetesOnly := details.ClientInfo().HasKubernetesOnly()
+	hasSwarmOnly := details.ClientInfo().HasSwarmOnly()
 
 	// Check recursively so that, e.g., `docker stack ls` returns the same output as `docker stack`
 	for curr := cmd; curr != nil; curr = curr.Parent() {
@@ -364,6 +366,18 @@ func areSubcommandsSupported(cmd *cobra.Command, details versionDetails) error {
 		}
 		_, isKubernetesAnnotated := curr.Annotations["kubernetes"]
 		_, isSwarmAnnotated := curr.Annotations["swarm"]
+		_, isAllAnnotated := curr.Annotations["all"]
+
+		// Handle commands that are annotated with `all`.
+		if isAllAnnotated {
+			if isSwarmAnnotated && hasKubernetesOnly {
+				return fmt.Errorf("%s is only supported on a Docker cli with either all or swarm features enabled", cmd.CommandPath())
+			}
+			if isKubernetesAnnotated && hasSwarmOnly {
+				return fmt.Errorf("%s is only supported on a Docker cli with either all or kubernetes features enabled", cmd.CommandPath())
+			}
+			continue
+		}
 
 		if isKubernetesAnnotated && !isSwarmAnnotated && !hasKubernetes {
 			return fmt.Errorf("%s is only supported on a Docker cli with kubernetes features enabled", cmd.CommandPath())

@@ -28,6 +28,9 @@ func newInspectCommand(dockerCli command.Cli) *cobra.Command {
 			opts.nodeIds = args
 			return runInspect(dockerCli, opts)
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 
 	flags := cmd.Flags()

@@ -17,6 +17,9 @@ func newPromoteCommand(dockerCli command.Cli) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runPromote(dockerCli, args)
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 }
 

@@ -19,8 +19,9 @@ func NewNodeCommand(dockerCli command.Cli) *cobra.Command {
 		Args:  cli.NoArgs,
 		RunE:  command.ShowHelp(dockerCli.Err()),
 		Annotations: map[string]string{
-			"version": "1.24",
+			"all":     "",
 			"swarm":   "",
+			"version": "1.24",
 		},
 	}
 	cmd.AddCommand(

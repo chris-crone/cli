@@ -27,6 +27,9 @@ func newRemoveCommand(dockerCli command.Cli) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runRemove(dockerCli, args, opts)
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 	flags := cmd.Flags()
 	flags.BoolVarP(&opts.force, "force", "f", false, "Force remove a node from the swarm")

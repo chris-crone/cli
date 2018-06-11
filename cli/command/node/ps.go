@@ -40,6 +40,9 @@ func newPsCommand(dockerCli command.Cli) *cobra.Command {
 
 			return runPs(dockerCli, options)
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 	flags := cmd.Flags()
 	flags.BoolVar(&options.noTrunc, "no-trunc", false, "Do not truncate output")

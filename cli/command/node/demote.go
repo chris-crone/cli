@@ -17,6 +17,9 @@ func newDemoteCommand(dockerCli command.Cli) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runDemote(dockerCli, args)
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 }
 

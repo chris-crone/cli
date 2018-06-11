@@ -27,6 +27,9 @@ func newUpdateCommand(dockerCli command.Cli) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runUpdate(dockerCli, cmd.Flags(), args[0])
 		},
+		Annotations: map[string]string{
+			"swarm": "",
+		},
 	}
 
 	flags := cmd.Flags()
